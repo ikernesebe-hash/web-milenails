@@ -3,6 +3,24 @@
    ================================================================ */
 'use strict';
 
+/* ---- Image loading optimization ---- */
+(function optimizeImageLoading() {
+  const heroImg = document.querySelector('.hero-img-wrapper img');
+
+  document.querySelectorAll('img').forEach(img => {
+    if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+
+    // Keep above-the-fold image eager; lazy-load the rest.
+    if (img !== heroImg && !img.hasAttribute('loading')) {
+      img.setAttribute('loading', 'lazy');
+    }
+  });
+
+  if (heroImg) {
+    heroImg.setAttribute('fetchpriority', 'high');
+  }
+})();
+
 /* ---- Navbar: scroll style ---- */
 const navbar = document.getElementById('navbar');
 if (navbar) {
@@ -19,14 +37,12 @@ if (hamburger && navLinks) {
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
     navLinks.classList.toggle('open', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   navLinks.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
-      document.body.style.overflow = '';
     });
   });
 
@@ -34,7 +50,6 @@ if (hamburger && navLinks) {
     if (navbar && !navbar.contains(e.target) && navLinks.classList.contains('open')) {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
-      document.body.style.overflow = '';
     }
   });
 }
