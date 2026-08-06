@@ -38,6 +38,7 @@ if (hamburger && navLinks) {
     const isOpen = hamburger.classList.toggle('open');
     navLinks.classList.toggle('open', isOpen);
     hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('menu-open', isOpen);
   });
 
   navLinks.querySelectorAll('.nav-link').forEach(link => {
@@ -45,6 +46,7 @@ if (hamburger && navLinks) {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
     });
   });
 
@@ -53,6 +55,7 @@ if (hamburger && navLinks) {
       hamburger.classList.remove('open');
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
     }
   });
 }
