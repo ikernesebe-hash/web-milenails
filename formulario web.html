@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MileNails · Tu Web 💅</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --hot: #FF1493;
+  --hot2: #C2185B;
+  --pale: #FFF0F5;
+  --white: #FFFFFF;
+  --dark: #1A0A12;
+  --muted: #8B4E68;
+  --border: #F0BBCC;
+  --bg: #FDF5F8;
+  --r-lg: 20px;
+  --r-md: 12px;
+  --r-sm: 8px;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* ── HEADER ── */
+.hdr {
+  background: linear-gradient(150deg, var(--hot) 0%, var(--hot2) 100%);
+  padding: 56px 24px 56px;
+  text-align: center;
+}
+.hdr-emoji { font-size: 60px; display: block; margin-bottom: 14px; }
+.hdr-tag {
+  display: inline-block;
+  background: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.95);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 5px 18px;
+  border-radius: 50px;
+  border: 1px solid rgba(255,255,255,.3);
+  margin-bottom: 20px;
+}
+.hdr h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.hdr h1 em { font-style: italic; }
+.hdr p {
+  color: rgba(255,255,255,.85);
+  font-size: clamp(.9rem, 2vw, 1rem);
+  font-weight: 300;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ── MAIN ── */
+.wrap {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* ── INTRO CARD ── */
+.intro-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 30px 34px;
+  margin-bottom: 44px;
+  box-shadow: 0 4px 20px rgba(255,20,147,.06);
+}
+.intro-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  color: var(--hot);
+  margin-bottom: 10px;
+}
+.intro-card p { color: #4a2035; margin-bottom: 10px; }
+.intro-card p:last-of-type { margin-bottom: 0; }
+.intro-note {
+  display: flex;
+  gap: 10px;
+  background: var(--pale);
+  border-left: 3px solid var(--hot);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: .84rem;
+  color: var(--muted);
+}
+
+/* ── SECTION HEADINGS ── */
+.sec {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin: 46px 0 16px;
+}
+.sec-n {
+  width: 33px;
+  height: 33px;
+  min-width: 33px;
+  background: var(--hot);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.sec-t h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1.2;
+}
+.sec-t p { font-size: .78rem; color: var(--muted); margin-top: 3px; }
+
+/* ── FIELD CARD ── */
+.fc {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 26px 28px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 10px rgba(255,20,147,.04);
+}
+.fc:focus-within { border-color: #FF69B4; }
+
+/* ── LABELS ── */
+.lbl {
+  display: block;
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-bottom: 6px;
+}
+.lbl .r { color: var(--hot); }
+.hint {
+  display: block;
+  font-size: .77rem;
+  color: #c07090;
+  font-weight: 400;
+  margin-bottom: 7px;
+}
+
+/* ── INPUTS ── */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .9rem;
+  color: var(--dark);
+  background: #FFFBFC;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--hot);
+  box-shadow: 0 0 0 3px rgba(255,20,147,.09);
+  background: #fff;
+}
+textarea { resize: vertical; min-height: 100px; }
+select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B4E68' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+}
+
+/* ── 2-COL GRID ── */
+.gr2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 540px) {
+  .gr2 { grid-template-columns: 1fr; }
+  .fc { padding: 20px 18px; }
+  .intro-card { padding: 22px 18px; }
+  .opts { grid-template-columns: 1fr !important; }
+}
+
+/* ── SPACER ── */
+.sp { margin-bottom: 18px; }
+
+/* ── OPTIONS (checkbox / radio) ── */
+.opts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+.opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px 13px;
+  background: #FFF8FB;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: .85rem;
+  color: var(--dark);
+  line-height: 1.35;
+  transition: border-color .15s, background .15s;
+  user-select: none;
+}
+.opt input[type="checkbox"],
+.opt input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  margin-top: 2px;
+  cursor: pointer;
+  position: relative;
+  background: #fff;
+  transition: background .15s, border-color .15s;
+}
+.opt input[type="radio"] { border-radius: 50%; }
+.opt input[type="checkbox"]:checked {
+  background: var(--hot);
+  border-color: var(--hot);
+}
+.opt input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 1px;
+  width: 7px; height: 4px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg);
+}
+.opt input[type="radio"]:checked {
+  background: var(--hot);
+  border-color: var(--hot);
+}
+.opt input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px; top: 4px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+.opt.on { border-color: var(--hot); background: var(--pale); }
+
+/* ── DYNAMIC PRICING SECTION ── */
+#pricing-wrap {
+  display: none;
+  margin-top: 16px;
+}
+#pricing-wrap.show { display: block; }
+
+.pricing-card {
+  background: var(--white);
+  border: 2px solid var(--hot);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(255,20,147,.1);
+}
+.pricing-card-head {
+  background: linear-gradient(135deg, var(--hot), var(--hot2));
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pricing-card-head .icon { font-size: 1.4rem; }
+.pricing-card-head h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.pricing-card-head p { font-size: .78rem; color: rgba(255,255,255,.8); margin-top: 2px; }
+.pricing-card-body { padding: 22px 24px; }
+.price-hint {
+  font-size: .82rem;
+  color: var(--muted);
+  background: var(--pale);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  margin-bottom: 18px;
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid #F5E0EC;
+}
+.price-row:last-child { border-bottom: none; }
+.price-svc {
+  flex: 1;
+  font-size: .9rem;
+  color: var(--dark);
+  font-weight: 500;
+}
+.price-inp {
+  width: 120px;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 8px 10px !important;
+}
+.pricing-promo {
+  border-top: 1px solid var(--border);
+  margin-top: 18px;
+  padding-top: 18px;
+}
+
+/* ── SUBMIT ── */
+.submit-area { text-align: center; margin-top: 50px; }
+.btn-send {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--hot), var(--hot2));
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 16px 46px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 28px rgba(255,20,147,.32);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-send:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(255,20,147,.42); }
+.btn-send:active { transform: none; }
+.btn-send:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+.send-note { font-size: .78rem; color: var(--muted); margin-top: 12px; }
+
+/* ── SUCCESS ── */
+#success-msg {
+  display: none;
+  text-align: center;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 60px 30px;
+  margin-top: 20px;
+}
+#success-msg .big { font-size: 60px; display: block; margin-bottom: 12px; }
+#success-msg h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--hot); margin-bottom: 10px; }
+#success-msg p { color: var(--muted); }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 22px 20px 40px;
+  font-size: .76rem;
+  color: #c07090;
+}
+footer strong { color: var(--hot); }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <span class="hdr-emoji">💅</span>
+  <div class="hdr-tag">Briefing Privado · Solo para Melani</div>
+  <h1>Tu web <em>MileNails</em><br/>está a punto de nacer</h1>
+  <p>Cuéntame todo lo que necesito saber para que quede exactamente como lo imaginas. Tómate el tiempo que necesites.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="intro-card">
+    <h2>Hola Melani 👋</h2>
+    <p>Para que tu web quede exactamente como la imaginas — con tu estilo, tus servicios y tu esencia — necesito que me cuentes algunas cosas sobre tu negocio.</p>
+    <p>No te preocupes si no tienes todo listo ahora: rellena lo que puedas y lo que quede pendiente lo vemos juntas después. Lo importante es empezar.</p>
+    <div class="intro-note">
+      <span>⏱</span>
+      <span>Tiempo estimado: <strong>10–15 minutos</strong> · Tus respuestas me llegan directamente en cuanto envíes el formulario.</span>
+    </div>
+  </div>
+
+  <form id="form" action="https://formspree.io/f/xzdwwpbl" method="POST">
+    <input type="hidden" name="_subject" value="🌸 Briefing MileNails — Melani"/>
+
+    <!-- ══ 1. DATOS ══ -->
+    <div class="sec">
+      <div class="sec-n">1</div>
+      <div class="sec-t"><h3>Datos del negocio</h3><p>Lo básico que aparecerá en toda la web</p></div>
+    </div>
+    <div class="fc">
+      <div class="gr2">
+        <div>
+          <label class="lbl">Nombre exacto del salón <span class="r">*</span></label>
+          <input type="text" name="nombre_salon" placeholder="ej. MileNails" required/>
+        </div>
+        <div>
+          <label class="lbl">Tu nombre completo <span class="r">*</span></label>
+          <input type="text" name="nombre_propietaria" placeholder="ej. Melanie García" required/>
+        </div>
+      </div>
+      <div class="sp"></div>
+      <div class="gr2">
+        <div>
+          <label class="lbl">Dirección completa <span class="r">*</span></label>
+          <input type="text" name="direccion" placeholder="Calle, número, ciudad, CP" required/>
+        </div>
+        <div>
+          <label class="lbl">Teléfono / WhatsApp <span class="r">*</span></label>
+          <input type="tel" name="telefono" placeholder="+34 600 000 000" required/>
+        </div>
+      </div>
+      <div class="sp"></div>
+      <div class="gr2">
+        <div>
+          <label class="lbl">Email del negocio <span class="r">*</span></label>
+          <input type="email" name="email_negocio" placeholder="info@milenails.com" required/>
+        </div>
+        <div>
+          <label class="lbl">Horario de atención</label>
+          <input type="text" name="horario" placeholder="ej. Lun–Sáb 10:00–20:00"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2. REDES ══ -->
+    <div class="sec">
+      <div class="sec-n">2</div>
+      <div class="sec-t"><h3>Redes sociales</h3><p>Para enlazarlas en la web y el footer</p></div>
+    </div>
+    <div class="fc">
+      <div class="gr2">
+        <div>
+          <label class="lbl">📸 Instagram</label>
+          <input type="text" name="instagram" placeholder="@milenails"/>
+        </div>
+        <div>
+          <label class="lbl">🎵 TikTok</label>
+          <input type="text" name="tiktok" placeholder="@milenails"/>
+        </div>
+      </div>
+      <div class="sp"></div>
+      <div class="gr2">
+        <div>
+          <label class="lbl">👍 Facebook</label>
+          <input type="text" name="facebook" placeholder="URL de tu página de Facebook"/>
+        </div>
+        <div>
+          <label class="lbl">🔗 Otro (Booksy, Linktree…)</label>
+          <input type="url" name="otro_link" placeholder="https://..."/>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. SERVICIOS ══ -->
+    <div class="sec">
+      <div class="sec-n">3</div>
+      <div class="sec-t"><h3>Servicios y precios</h3><p>Marca lo que ofreces y luego te pido los precios</p></div>
+    </div>
+    <div class="fc">
+      <label class="lbl">¿Qué servicios ofreces? Marca todos los que apliquen</label>
+      <div class="opts" id="svc-grid">
+        <label class="opt"><input type="checkbox" class="sc" value="Manicura básica"/>Manicura básica</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Esmaltado permanente"/>Esmaltado permanente</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Manicura en gel"/>Manicura en gel</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Uñas de acrílico"/>Uñas de acrílico</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Uñas de porcelana"/>Uñas de porcelana</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Nail Art / diseños"/>Nail Art / diseños</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Pedicura básica"/>Pedicura básica</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Pedicura con esmaltado"/>Pedicura con esmaltado</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Pedicura spa"/>Pedicura spa</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Extensiones de uñas"/>Extensiones de uñas</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Relleno / mantenimiento"/>Relleno / mantenimiento</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Depilación"/>Depilación</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Diseño de cejas"/>Diseño de cejas</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Extensión de pestañas"/>Extensión de pestañas</label>
+        <label class="opt"><input type="checkbox" class="sc" value="Tratamiento de manos"/>Tratamiento de manos</label>
+      </div>
+      <div class="sp"></div>
+      <label class="lbl">Servicios adicionales no listados arriba</label>
+      <span class="hint">Escribe uno por línea. También aparecerán en la lista de precios.</span>
+      <textarea id="extra-svc" placeholder="ej. Lifting de pestañas&#10;Masaje de manos&#10;Semipermanente en pies"></textarea>
+    </div>
+
+    <!-- ══ PRECIOS DINÁMICOS ══ -->
+    <div id="pricing-wrap">
+      <div class="pricing-card">
+        <div class="pricing-card-head">
+          <span class="icon">💰</span>
+          <div>
+            <h4>Ahora dime los precios</h4>
+            <p>Los servicios que has marcado aparecen aquí — solo añade el precio de cada uno</p>
+          </div>
+        </div>
+        <div class="pricing-card-body">
+          <div class="price-hint">
+            💡 Si alguno tiene rango de precios escríbelo así: <strong>20€ – 35€</strong> &nbsp;|&nbsp; Si cobra por uña puedes poner: <strong>desde 5€/uña</strong>
+          </div>
+          <div id="price-rows"></div>
+          <div class="pricing-promo">
+            <label class="lbl">¿Tienes packs, bonos o promociones especiales?</label>
+            <span class="hint">Opcional — si tienes alguna oferta que quieras destacar en la web</span>
+            <textarea name="promociones" placeholder="ej. Pack manicura + pedicura → 40€ · Bono 5 sesiones con 10% dto · Primera visita con descuento…"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. IDENTIDAD ══ -->
+    <div class="sec">
+      <div class="sec-n">4</div>
+      <div class="sec-t"><h3>Tu historia e identidad</h3><p>Para la sección "Sobre mí" y el tono de la web</p></div>
+    </div>
+    <div class="fc">
+      <label class="lbl">¿Cuánto tiempo llevas con el salón? ¿Cómo empezaste?</label>
+      <textarea name="historia" placeholder="Cuéntame un poco tu historia. No tiene que ser perfecta — escríbela como si me la contaras en persona…"></textarea>
+      <div class="sp"></div>
+      <label class="lbl">¿Qué te diferencia de otros salones?</label>
+      <textarea name="diferenciador" placeholder="ej. Solo uso productos de alta calidad, atención muy personalizada, ambiente súper cálido…"></textarea>
+      <div class="sp"></div>
+      <label class="lbl">¿Cómo quieres que suene la web?</label>
+      <div class="opts" style="grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); margin-top:8px">
+        <label class="opt"><input type="radio" name="tono" value="Elegante y lujosa"/>✨ Elegante y lujosa</label>
+        <label class="opt"><input type="radio" name="tono" value="Cercana y divertida"/>😊 Cercana y divertida</label>
+        <label class="opt"><input type="radio" name="tono" value="Profesional y seria"/>💼 Profesional y seria</label>
+        <label class="opt"><input type="radio" name="tono" value="Trendy y moderna"/>🔥 Trendy y moderna</label>
+        <label class="opt"><input type="radio" name="tono" value="Mix de todo"/>🎨 Mix de todo</label>
+      </div>
+    </div>
+
+    <!-- ══ 5. IMÁGENES ══ -->
+    <div class="sec">
+      <div class="sec-n">5</div>
+      <div class="sec-t"><h3>Imágenes y material visual</h3><p>Fundamental para que la web luzca bien</p></div>
+    </div>
+    <div class="fc">
+      <label class="lbl">¿Tienes logotipo? <span class="r">*</span></label>
+      <div class="opts" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); margin-bottom: 20px">
+        <label class="opt"><input type="radio" name="tiene_logo" value="Sí, en alta calidad"/>✅ Sí, en alta calidad</label>
+        <label class="opt"><input type="radio" name="tiene_logo" value="Sí pero baja calidad"/>⚠️ Sí pero baja calidad</label>
+        <label class="opt"><input type="radio" name="tiene_logo" value="No tengo logo"/>❌ No tengo logo</label>
+      </div>
+      <label class="lbl">¿Tienes fotos de buena calidad del salón y tus trabajos? <span class="r">*</span></label>
+      <div class="opts" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); margin-bottom: 20px">
+        <label class="opt"><input type="radio" name="tiene_fotos" value="Sí, muchas fotos"/>📸 Sí, muchas fotos</label>
+        <label class="opt"><input type="radio" name="tiene_fotos" value="Algunas fotos"/>🖼️ Algunas fotos</label>
+        <label class="opt"><input type="radio" name="tiene_fotos" value="Pocas o ninguna"/>😬 Pocas o ninguna</label>
+      </div>
+      <label class="lbl">¿Cómo me las vas a pasar?</label>
+      <div class="opts" style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr))">
+        <label class="opt"><input type="radio" name="entrega_fotos" value="Google Drive"/>Google Drive</label>
+        <label class="opt"><input type="radio" name="entrega_fotos" value="WhatsApp"/>WhatsApp</label>
+        <label class="opt"><input type="radio" name="entrega_fotos" value="WeTransfer"/>WeTransfer</label>
+        <label class="opt"><input type="radio" name="entrega_fotos" value="Desde Instagram"/>Desde Instagram</label>
+        <label class="opt"><input type="radio" name="entrega_fotos" value="Aún no las tengo"/>Aún no las tengo</label>
+      </div>
+    </div>
+
+    <!-- ══ 6. DISEÑO ══ -->
+    <div class="sec">
+      <div class="sec-n">6</div>
+      <div class="sec-t"><h3>Diseño y referencias</h3><p>Para el estilo visual exacto que te gusta</p></div>
+    </div>
+    <div class="fc">
+      <label class="lbl">Colores de tu marca (confirma o cambia)</label>
+      <input type="text" name="colores" placeholder="ej. Fucsia intenso, rosa pastel, blanco — o cuéntame si quieres cambiar algo"/>
+      <div class="sp"></div>
+      <label class="lbl">¿Tienes alguna web que te guste como referencia?</label>
+      <span class="hint">URLs o descríbela: "quiero algo parecido a X", "me gusta el estilo de Y"</span>
+      <textarea name="referencias" placeholder="Ponlas aquí…"></textarea>
+      <div class="sp"></div>
+      <label class="lbl">¿Qué cosas NO quieres en tu web?</label>
+      <textarea name="no_quiero" placeholder="ej. Nada muy recargado, sin fondos oscuros, sin colores apagados…"></textarea>
+    </div>
+
+    <!-- ══ 7. RESERVAS ══ -->
+    <div class="sec">
+      <div class="sec-n">7</div>
+      <div class="sec-t"><h3>Reservas y funcionalidades</h3><p>Para saber qué botones y secciones necesitas</p></div>
+    </div>
+    <div class="fc">
+      <label class="lbl">¿Cómo quieres que las clientas reserven cita? <span class="r">*</span></label>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="reservas" value="Solo WhatsApp"/>💬 Solo WhatsApp</label>
+        <label class="opt"><input type="radio" name="reservas" value="Solo teléfono"/>📞 Solo teléfono</label>
+        <label class="opt"><input type="radio" name="reservas" value="Formulario en la web"/>📋 Formulario web</label>
+        <label class="opt"><input type="radio" name="reservas" value="Booksy o Calendly"/>📅 Booksy / Calendly</label>
+        <label class="opt"><input type="radio" name="reservas" value="Combinación"/>Combinación</label>
+      </div>
+      <div class="sp"></div>
+      <label class="lbl">Secciones que sí o sí quieres en tu web</label>
+      <div class="opts">
+        <label class="opt"><input type="checkbox" name="paginas" value="Inicio"/>🏠 Inicio</label>
+        <label class="opt"><input type="checkbox" name="paginas" value="Servicios y precios"/>💅 Servicios y precios</label>
+        <label class="opt"><input type="checkbox" name="paginas" value="Galería de trabajos"/>🖼️ Galería de trabajos</label>
+        <label class="opt"><input type="checkbox" name="paginas" value="Sobre mí"/>💁 Sobre mí</label>
+        <label class="opt"><input type="checkbox" name="paginas" value="Contacto y mapa"/>📍 Contacto y mapa</label>
+        <label class="opt"><input type="checkbox" name="paginas" value="Testimonios"/>⭐ Testimonios / reseñas</label>
+      </div>
+    </div>
+
+    <!-- ══ 8. PRESUPUESTO ══ -->
+    <div class="sec">
+      <div class="sec-n">8</div>
+      <div class="sec-t"><h3>Presupuesto</h3><p>Para organizarme y ofrecerte lo mejor dentro de tu rango</p></div>
+    </div>
+    <div class="fc">
+      <label class="lbl">¿Tienes presupuesto aproximado en mente?</label>
+      <select name="presupuesto">
+        <option value="" disabled selected>Selecciona un rango</option>
+        <option>Menos de 300€</option>
+        <option>300€ – 600€</option>
+        <option>600€ – 1.000€</option>
+        <option>Más de 1.000€</option>
+        <option>Aún no lo tengo claro</option>
+      </select>
+    </div>
+
+    <!-- ══ 9. OBSERVACIONES ══ -->
+    <div class="sec">
+      <div class="sec-n">9</div>
+      <div class="sec-t"><h3>Lo que quieras añadir</h3><p>Ideas, dudas, lo que no encajó en las preguntas anteriores</p></div>
+    </div>
+    <div class="fc">
+      <label class="lbl">Tu email de contacto <span class="r">*</span></label>
+      <span class="hint">Para poder responderte directamente</span>
+      <input type="email" name="_replyto" placeholder="melani@email.com" required/>
+      <div class="sp"></div>
+      <label class="lbl">¿Algo más que quieras contarme?</label>
+      <textarea name="observaciones" style="min-height:130px" placeholder="Ideas, referencias de Instagram, dudas, cosas que hayas visto y te gusten, lo que sea…"></textarea>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <button type="submit" class="btn-send" id="sbtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Enviar mi briefing
+      </button>
+      <p class="send-note">Tus respuestas me llegan directamente por email. Te confirmo recepción en menos de 24h. 💌</p>
+    </div>
+  </form>
+
+  <div id="success-msg">
+    <span class="big">🎉</span>
+    <h2>¡Recibido, Melani!</h2>
+    <p>Tu briefing ya está en mi bandeja. Me pongo a revisarlo y te escribo enseguida con los siguientes pasos. ¡Tu web MileNails está en marcha! 💅✨</p>
+  </div>
+
+</div>
+
+<footer>
+  <p>Hecho con 💗 especialmente para <strong>MileNails · Melani</strong></p>
+  <p style="margin-top:4px;opacity:.7">Formulario privado y confidencial.</p>
+</footer>
+
+<script>
+// ── Helper: escape HTML for dynamic content ──
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Checkbox / radio visual state ──
+function bindOpts() {
+  document.querySelectorAll('.opt').forEach(function(opt) {
+    var inp = opt.querySelector('input');
+    if (!inp) return;
+    if (inp.checked) opt.classList.add('on');
+    inp.addEventListener('change', function() {
+      if (inp.type === 'radio') {
+        document.querySelectorAll('input[name="' + inp.name + '"]').forEach(function(r) {
+          var p = r.closest('.opt');
+          if (p) p.classList.remove('on');
+        });
+      }
+      opt.classList.toggle('on', inp.checked);
+    });
+  });
+}
+
+// ── Dynamic pricing ──
+function getServices() {
+  var list = [];
+  document.querySelectorAll('.sc:checked').forEach(function(cb) {
+    list.push(cb.value);
+  });
+  var extra = document.getElementById('extra-svc').value.trim();
+  if (extra) {
+    extra.split('\n').forEach(function(line) {
+      var s = line.replace(/^[-•*]\s*/, '').trim();
+      if (s.length > 1) list.push(s);
+    });
+  }
+  return list;
+}
+
+function updatePricing() {
+  var services = getServices();
+  var wrap = document.getElementById('pricing-wrap');
+  var rows = document.getElementById('price-rows');
+
+  if (services.length === 0) {
+    wrap.classList.remove('show');
+    return;
+  }
+  wrap.classList.add('show');
+
+  // Save current values
+  var saved = {};
+  rows.querySelectorAll('.price-row').forEach(function(row) {
+    var inp = row.querySelector('input');
+    if (inp && inp.value) saved[row.dataset.key] = inp.value;
+  });
+
+  // Rebuild
+  rows.innerHTML = '';
+  services.forEach(function(svc) {
+    var key = svc;
+    var row = document.createElement('div');
+    row.className = 'price-row';
+    row.dataset.key = key;
+    var fName = 'precio_' + svc.replace(/[^a-zA-Z0-9áéíóúñüÁÉÍÓÚÑÜ]/g,'_');
+    row.innerHTML =
+      '<span class="price-svc">💅 ' + esc(svc) + '</span>' +
+      '<input type="text" name="' + esc(fName) + '" class="price-inp" placeholder="ej. 20€" value="' + esc(saved[key] || '') + '"/>';
+    rows.appendChild(row);
+  });
+}
+
+// ── Form submit ──
+document.getElementById('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var btn = document.getElementById('sbtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Enviando…';
+  try {
+    var res = await fetch(this.action, {
+      method: 'POST',
+      body: new FormData(this),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      this.style.display = 'none';
+      var s = document.getElementById('success-msg');
+      s.style.display = 'block';
+      s.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '⚠️ Error — inténtalo de nuevo';
+    }
+  } catch(err) {
+    btn.disabled = false;
+    btn.innerHTML = '⚠️ Sin conexión — reintenta';
+  }
+});
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', function() {
+  bindOpts();
+
+  document.querySelectorAll('.sc').forEach(function(cb) {
+    cb.addEventListener('change', updatePricing);
+  });
+
+  var timer;
+  document.getElementById('extra-svc').addEventListener('input', function() {
+    clearTimeout(timer);
+    timer = setTimeout(updatePricing, 500);
+  });
+});
+</script>
+</body>
+</html>

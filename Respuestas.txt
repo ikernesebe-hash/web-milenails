@@ -1,0 +1,122 @@
+New form submission on melani
+
+Someone just submitted a form on infomelani.netlify.app/. Here's what they had to say:
+
+nombre_salon
+
+Milenails
+nombre_propietaria
+
+Melanny Tabares Álvarez
+direccion
+
+Calle Patricio Ferrándiz 33A
+telefono
+
++34660698806
+email_negocio
+
+milenailsdenia@gmail.com
+horario
+
+Lunes - viernes 10:00-14:00/16:30-20:00 sábados 10:00-14:00
+instagram
+
+@Milenailsdenia
+tiktok
+
+@milenailsdenia
+facebook
+
+https://www.facebook.com/share/17iBggpYoi/?mibextid=wwXIfr
+otro_link
+
+precio_Manicura_básica
+
+15€-20€
+precio_Esmaltado_permanente
+
+30€
+precio_Manicura_en_gel
+
+45€
+precio_Uñas_de_acrílico
+
+45€
+precio_Uñas_de_porcelana
+
+45€
+precio_Nail_Art___diseños
+
+Plus de 5€
+precio_Pedicura_básica
+
+25€-30€
+precio_Pedicura_con_esmaltado
+
+35€
+precio_Pedicura_spa
+
+25€
+precio_Extensiones_de_uñas
+
+45€
+precio_Relleno___mantenimiento
+
+40€
+precio_Depilación
+
+10€
+precio_Diseño_de_cejas
+
+precio_Extensión_de_pestañas
+
+40-60€
+precio_Tratamiento_de_manos
+
+precio_Lifting_de_pestañas
+
+30-40€
+precio_Diseño_de_cejas_con_henna
+
+15€
+precio_Masajes_relajantes_y_descontracturantes
+
+40-50€
+promociones
+
+historia
+
+Mi madre empezó a emprender y me abrió camino hace 12 años en el local que hoy en día es Milenails a mi me llamó la atención desde siempre este mundo y empecé como ayudante hasta que vi que me encantó me formé y hoy en día llevo 4 años
+diferenciador
+
+Los productos de alta calidad
+El cuidado que le damos a las uñas sobre todo
+Y que damos una atención personalizada
+tono
+
+Mix de todo
+tiene_logo
+
+Sí, en alta calidad
+tiene_fotos
+
+Sí, muchas fotos
+entrega_fotos
+
+WeTransfer
+colores
+
+referencias
+
+no_quiero
+
+reservas
+
+Solo WhatsApp
+paginas
+
+Inicio, Servicios y precios, Galería de trabajos, Sobre mí, Contacto y mapa, Testimonios
+_replyto
+
+melannytabaresalvarez04@gmail.com

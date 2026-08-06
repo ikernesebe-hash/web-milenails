@@ -1,0 +1,120 @@
+﻿/* ================================================================
+   ANIMATIONS.CSS  –  MileNails Uñas & Estética
+   ================================================================ */
+
+/* ---- Keyframes ---- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(48px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scrollBob {
+  0%,100% { transform: translateX(-50%) translateY(0);   }
+  50%      { transform: translateX(-50%) translateY(9px); }
+}
+@keyframes pulseWa {
+  0%,100% { box-shadow: 0  8px 28px rgba(37,211,102,.45); }
+  50%      { box-shadow: 0  8px 44px rgba(37,211,102,.72),
+                         0  0   0  14px rgba(37,211,102,.10); }
+}
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+@keyframes blobFloat {
+  0%,100% { border-radius: 40% 60% 65% 35% / 35% 35% 65% 65%; }
+  33%      { border-radius: 55% 45% 40% 60% / 55% 40% 60% 45%; }
+  66%      { border-radius: 35% 65% 55% 45% / 45% 60% 40% 55%; }
+}
+
+/* ---- Scroll reveal ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity .75s ease, transform .75s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for child elements */
+.services-grid   .reveal:nth-child(1),
+.testimonials-grid .reveal:nth-child(1),
+.services-full   .reveal:nth-child(1) { transition-delay: .06s; }
+
+.services-grid   .reveal:nth-child(2),
+.testimonials-grid .reveal:nth-child(2),
+.services-full   .reveal:nth-child(2) { transition-delay: .16s; }
+
+.services-grid   .reveal:nth-child(3),
+.testimonials-grid .reveal:nth-child(3),
+.services-full   .reveal:nth-child(3) { transition-delay: .26s; }
+
+.services-full .reveal:nth-child(4) { transition-delay: .36s; }
+.services-full .reveal:nth-child(5) { transition-delay: .46s; }
+.services-full .reveal:nth-child(6) { transition-delay: .56s; }
+
+/* ---- Hero entrance ---- */
+.fade-in {
+  opacity: 0;
+  animation: fadeInUp .9s ease .1s forwards;
+}
+.fade-in-right {
+  opacity: 0;
+  animation: fadeInRight 1s ease .35s forwards;
+}
+
+/* ---- WhatsApp pulse ---- */
+.whatsapp-float {
+  animation: pulseWa 2.6s ease-in-out infinite;
+}
+
+/* ---- Gallery hover overlay ---- */
+.gallery-item::after {
+  content: '🔍';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  background: rgba(255,20,147,.18);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+/* ---- Skeleton shimmer (loading placeholder) ---- */
+.skeleton {
+  background: linear-gradient(90deg, #fce8f0 25%, #fff0f6 50%, #fce8f0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 8px;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after {
+    animation-duration:        .01ms !important;
+    animation-iteration-count: 1    !important;
+    transition-duration:       .01ms !important;
+    scroll-behavior:           auto !important;
+  }
+  .reveal, .fade-in, .fade-in-right {
+    opacity: 1;
+    transform: none;
+  }
+  .whatsapp-float {
+    animation: none;
+  }
+}

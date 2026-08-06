@@ -1,0 +1,628 @@
+﻿/* ================================================================
+   MAIN.JS  –  MileNails Uñas & Estética
+   ================================================================ */
+'use strict';
+
+/* ---- Navbar: scroll style ---- */
+const navbar = document.getElementById('navbar');
+if (navbar) {
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+}
+
+/* ---- Hamburger / mobile nav ---- */
+const hamburger = document.getElementById('hamburger');
+const navLinks  = document.getElementById('navLinks');
+
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  navLinks.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (navbar && !navbar.contains(e.target) && navLinks.classList.contains('open')) {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+}
+
+/* ---- Active nav link ---- */
+(function () {
+  const path = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-link').forEach(link => {
+    const href = (link.getAttribute('href') || '').split('/').pop();
+    link.classList.toggle('active', href === path);
+  });
+})();
+
+/* ---- Scroll reveal (IntersectionObserver) ---- */
+const revealEls = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window && revealEls.length) {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => io.observe(el));
+}
+
+/* ---- Gallery filter (galeria page) ---- */
+const filterBtns  = document.querySelectorAll('.filter-btn');
+const galleryFull = document.getElementById('galleryFull');
+
+if (filterBtns.length && galleryFull) {
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.filter;
+      galleryFull.querySelectorAll('.g-item').forEach(item => {
+        const cats = (item.dataset.cat || '').split(/\s+/).filter(Boolean);
+        const show = cat === 'all' || cats.includes(cat);
+        item.style.display = show ? '' : 'none';
+      });
+    });
+  });
+}
+
+/* ---- Home gallery carousel (index page) ---- */
+(function initHomeGalleryCarousel() {
+  const carousel = document.getElementById('homeGalleryCarousel');
+  if (!carousel) return;
+
+  const track = carousel.querySelector('.gallery-track');
+  const prevBtn = carousel.querySelector('.gallery-btn-prev');
+  const nextBtn = carousel.querySelector('.gallery-btn-next');
+  if (!track || !prevBtn || !nextBtn) return;
+
+  const realSlides = Array.from(track.querySelectorAll('.gallery-item'));
+  if (realSlides.length < 2) return;
+
+  let currentIndex = 0;
+  let clonesPerSide = 0;
+  let stepPx = 0;
+  let timerId = null;
+  let isTransitioning = false;
+
+  const visibleSlides = () => {
+    if (window.innerWidth <= 480) return 1;
+    if (window.innerWidth <= 768) return 2;
+    return 3;
+  };
+
+  const getGapPx = () => {
+    const styles = window.getComputedStyle(track);
+    return parseFloat(styles.columnGap || styles.gap || '16') || 16;
+  };
+
+  const setTransform = (withTransition = true) => {
+    track.style.transition = withTransition ? 'transform .62s cubic-bezier(.22,.61,.36,1)' : 'none';
+    track.style.transform = 'translate3d(' + (-currentIndex * stepPx) + 'px,0,0)';
+  };
+
+  const clearClones = () => {
+    track.querySelectorAll('.gallery-item.is-clone').forEach(clone => clone.remove());
+  };
+
+  const createClones = () => {
+    const head = realSlides.slice(0, clonesPerSide);
+    const tail = realSlides.slice(realSlides.length - clonesPerSide);
+
+    tail.forEach(slide => {
+      const clone = slide.cloneNode(true);
+      clone.classList.add('is-clone');
+      track.insertBefore(clone, track.firstChild);
+    });
+
+    head.forEach(slide => {
+      const clone = slide.cloneNode(true);
+      clone.classList.add('is-clone');
+      track.appendChild(clone);
+    });
+  };
+
+  const setup = () => {
+    clearClones();
+    clonesPerSide = visibleSlides();
+    createClones();
+
+    const firstSlide = track.querySelector('.gallery-item');
+    if (!firstSlide) return;
+
+    stepPx = firstSlide.getBoundingClientRect().width + getGapPx();
+    currentIndex = clonesPerSide;
+    setTransform(false);
+  };
+
+  const normalizeIfNeeded = () => {
+    const realCount = realSlides.length;
+    const minIndex = clonesPerSide;
+    const maxIndex = clonesPerSide + realCount - 1;
+
+    if (currentIndex > maxIndex) {
+      currentIndex -= realCount;
+      setTransform(false);
+    } else if (currentIndex < minIndex) {
+      currentIndex += realCount;
+      setTransform(false);
+    }
+  };
+
+  const go = direction => {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    currentIndex += direction;
+    setTransform(true);
+  };
+
+  const startAuto = () => {
+    stopAuto();
+    timerId = window.setInterval(() => go(1), 1850);
+  };
+
+  const stopAuto = () => {
+    if (!timerId) return;
+    window.clearInterval(timerId);
+    timerId = null;
+  };
+
+  prevBtn.addEventListener('click', () => go(-1));
+  nextBtn.addEventListener('click', () => go(1));
+
+  track.addEventListener('transitionend', () => {
+    isTransitioning = false;
+    normalizeIfNeeded();
+  });
+
+  carousel.addEventListener('mouseenter', stopAuto);
+  carousel.addEventListener('mouseleave', startAuto);
+  carousel.addEventListener('focusin', stopAuto);
+  carousel.addEventListener('focusout', startAuto);
+
+  window.addEventListener('resize', () => {
+    setup();
+  }, { passive: true });
+
+  setup();
+  startAuto();
+})();
+
+/* ---- Testimonials carousel (index page) ---- */
+(function initTestimonialsCarousel() {
+  const carousel = document.getElementById('testimonialsCarousel');
+  if (!carousel) return;
+
+  const track = carousel.querySelector('.testimonials-track');
+  const prevBtn = carousel.querySelector('.testi-btn-prev');
+  const nextBtn = carousel.querySelector('.testi-btn-next');
+  const dotsWrap = document.getElementById('testimonialsDots');
+  if (!track || !prevBtn || !nextBtn) return;
+
+  const slides = Array.from(track.querySelectorAll('.testimonial-card'));
+  if (slides.length < 2) return;
+
+  if (!dotsWrap) return;
+  dotsWrap.innerHTML = '';
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'testi-dot' + (i === 0 ? ' active' : '');
+    dot.type = 'button';
+    dot.dataset.slide = String(i);
+    dot.setAttribute('aria-label', 'Ir a reseña ' + (i + 1));
+    dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    dotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(dotsWrap.querySelectorAll('.testi-dot'));
+
+  let currentIndex = 0;
+  let timerId = null;
+
+  const update = () => {
+    track.style.transform = 'translate3d(' + (-currentIndex * 100) + '%,0,0)';
+    dots.forEach((dot, i) => {
+      const active = i === currentIndex;
+      dot.classList.toggle('active', active);
+      dot.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+  };
+
+  const goTo = nextIndex => {
+    currentIndex = (nextIndex + slides.length) % slides.length;
+    update();
+  };
+
+  const startAuto = () => {
+    stopAuto();
+    timerId = window.setInterval(() => goTo(currentIndex + 1), 4500);
+  };
+
+  const stopAuto = () => {
+    if (!timerId) return;
+    window.clearInterval(timerId);
+    timerId = null;
+  };
+
+  prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+  nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = Number(dot.dataset.slide);
+      if (!Number.isNaN(idx)) goTo(idx);
+    });
+  });
+
+  carousel.addEventListener('mouseenter', stopAuto);
+  carousel.addEventListener('mouseleave', startAuto);
+  carousel.addEventListener('focusin', stopAuto);
+  carousel.addEventListener('focusout', startAuto);
+
+  update();
+  startAuto();
+})();
+
+/* ---- Lightbox ---- */
+(function initLightbox() {
+  const items = document.querySelectorAll('.gallery-item img, .g-item img');
+  if (!items.length) return;
+
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    display: 'none', position: 'fixed', inset: '0', zIndex: '2000',
+    background: 'rgba(0,0,0,.92)', alignItems: 'center',
+    justifyContent: 'center', cursor: 'zoom-out'
+  });
+  const img = document.createElement('img');
+  Object.assign(img.style, {
+    maxWidth: '90vw', maxHeight: '90vh',
+    borderRadius: '12px', boxShadow: '0 0 60px rgba(0,0,0,.5)'
+  });
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+
+  function open(src, alt) {
+    img.src = src; img.alt = alt;
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  items.forEach(i => {
+    i.style.cursor = 'zoom-in';
+    i.addEventListener('click', () => open(i.src, i.alt));
+  });
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+
+/* ---- Booking date (Mon-Sat only) ---- */
+(function initBookingDate() {
+  const fechaInput = document.getElementById('fecha');
+  if (!fechaInput) return;
+
+  const isWorkingDay = date => date.getDay() !== 0; // Sunday closed
+
+  const nextWorkingDay = fromDate => {
+    const d = new Date(fromDate);
+    d.setHours(0, 0, 0, 0);
+    while (!isWorkingDay(d)) d.setDate(d.getDate() + 1);
+    return d;
+  };
+
+  // Preferred UX: flatpickr calendar with Sundays disabled.
+  if (window.flatpickr) {
+    const startDate = nextWorkingDay(new Date());
+    window.flatpickr(fechaInput, {
+      locale: window.flatpickr.l10ns.es,
+      dateFormat: 'Y-m-d',
+      minDate: startDate,
+      disable: [date => !isWorkingDay(date)]
+    });
+    return;
+  }
+
+  // Fallback for native date input if flatpickr is blocked.
+  const startDate = nextWorkingDay(new Date());
+  fechaInput.min = startDate.toISOString().split('T')[0];
+
+  fechaInput.addEventListener('change', () => {
+    if (!fechaInput.value) return;
+    const chosen = new Date(fechaInput.value + 'T00:00:00');
+    if (!isWorkingDay(chosen)) {
+      fechaInput.setCustomValidity('Solo hay citas de lunes a sábado.');
+      fechaInput.reportValidity();
+      fechaInput.value = '';
+    } else {
+      fechaInput.setCustomValidity('');
+    }
+  });
+})();
+
+/* ---- Contact form ---- */
+const form = document.getElementById('contactForm');
+if (form) {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const nombre = (form.querySelector('#nombre')?.value || '').trim();
+    const telefono = (form.querySelector('#telefono')?.value || '').trim();
+    const servicio = form.querySelector('#servicio')?.selectedOptions?.[0]?.textContent || 'Consulta';
+    const fecha = (form.querySelector('#fecha')?.value || '').trim();
+    const mensaje = (form.querySelector('#mensaje')?.value || '').trim();
+
+    if (!nombre || !telefono || !mensaje) {
+      form.reportValidity();
+      return;
+    }
+
+    const waText = [
+      'Hola MileNails, quiero reservar una cita.',
+      'Nombre: ' + nombre,
+      'Telefono: ' + telefono,
+      'Servicio: ' + servicio,
+      'Fecha preferida: ' + (fecha || 'Por definir'),
+      'Detalle: ' + mensaje
+    ].join('\n');
+
+    const waUrl = 'https://wa.me/34660698806?text=' + encodeURIComponent(waText);
+    const btn = form.querySelector('[type="submit"]');
+    const orig = btn.textContent;
+    btn.textContent = 'Abriendo WhatsApp...';
+    btn.disabled = true;
+
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.disabled = false;
+    }, 700);
+  });
+}
+
+/* ---- Cookies consent ---- */
+(function initCookieConsent() {
+  const CONSENT_KEY = 'milenails_cookie_consent_v1';
+  const PREFS_KEY = 'milenails_cookie_preferences_v1';
+  const isInnerPage = window.location.pathname.includes('/pages/');
+  const legalPaths = {
+    cookies: isInnerPage ? 'politica-cookies.html' : 'pages/politica-cookies.html',
+    privacy: isInnerPage ? 'politica-privacidad.html' : 'pages/politica-privacidad.html'
+  };
+
+  const safeGet = key => {
+    try {
+      return window.localStorage.getItem(key);
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const safeSet = (key, value) => {
+    try {
+      window.localStorage.setItem(key, value);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
+
+  const parsePrefs = raw => {
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return {
+        necessary: true,
+        analytics: !!parsed.analytics,
+        marketing: !!parsed.marketing,
+        updatedAt: parsed.updatedAt || new Date().toISOString()
+      };
+    } catch (_) {
+      return null;
+    }
+  };
+
+  const readPrefs = () => {
+    const parsed = parsePrefs(safeGet(PREFS_KEY));
+    if (parsed) return parsed;
+
+    const consent = safeGet(CONSENT_KEY);
+    if (consent === 'accepted') {
+      return { necessary: true, analytics: true, marketing: true, updatedAt: new Date().toISOString() };
+    }
+    if (consent === 'rejected') {
+      return { necessary: true, analytics: false, marketing: false, updatedAt: new Date().toISOString() };
+    }
+
+    return { necessary: true, analytics: false, marketing: false, updatedAt: new Date().toISOString() };
+  };
+
+  const savePrefs = prefs => {
+    const payload = {
+      necessary: true,
+      analytics: !!prefs.analytics,
+      marketing: !!prefs.marketing,
+      updatedAt: new Date().toISOString()
+    };
+    safeSet(PREFS_KEY, JSON.stringify(payload));
+    return payload;
+  };
+
+  const consentFromPrefs = prefs => {
+    if (prefs.analytics || prefs.marketing) return 'accepted';
+    return 'rejected';
+  };
+
+  const applyConsent = value => {
+    if (!value) {
+      document.documentElement.removeAttribute('data-cookie-consent');
+      return;
+    }
+    document.documentElement.setAttribute('data-cookie-consent', value);
+  };
+
+  const closeBanner = banner => {
+    if (!banner) return;
+    banner.classList.remove('is-visible');
+    document.body.classList.remove('cookie-banner-open');
+    window.setTimeout(() => {
+      if (banner.parentNode) banner.parentNode.removeChild(banner);
+    }, 280);
+  };
+
+  const saveConsent = (value, banner) => {
+    if (value === 'accepted') {
+      savePrefs({ analytics: true, marketing: true });
+    } else if (value === 'rejected') {
+      savePrefs({ analytics: false, marketing: false });
+    }
+    safeSet(CONSENT_KEY, value);
+    applyConsent(value);
+    closeBanner(banner);
+  };
+
+  const renderBanner = () => {
+    const current = document.getElementById('cookieBanner');
+    if (current) return current;
+
+    const banner = document.createElement('section');
+    banner.id = 'cookieBanner';
+    banner.className = 'cookie-banner';
+    banner.setAttribute('aria-label', 'Aviso de cookies');
+    banner.innerHTML =
+      '<div class="cookie-inner">' +
+        '<p class="cookie-text">Usamos cookies propias para mejorar tu experiencia de navegación. Puedes aceptar o rechazar las cookies no esenciales. Más información en nuestra <a href="' + legalPaths.cookies + '">Política de Cookies</a> y <a href="' + legalPaths.privacy + '">Política de Privacidad</a>.</p>' +
+        '<div class="cookie-actions">' +
+          '<button type="button" class="cookie-btn reject" data-cookie-action="reject">Rechazar</button>' +
+          '<button type="button" class="cookie-btn accept" data-cookie-action="accept">Aceptar</button>' +
+          '<button type="button" class="cookie-btn config" data-cookie-action="config">Configurar</button>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(banner);
+    banner.classList.add('is-visible');
+    document.body.classList.add('cookie-banner-open');
+
+    banner.addEventListener('click', e => {
+      const action = e.target && e.target.getAttribute('data-cookie-action');
+      if (!action) return;
+      if (action === 'accept') {
+        saveConsent('accepted', banner);
+      } else if (action === 'reject') {
+        saveConsent('rejected', banner);
+      } else if (action === 'config') {
+        window.location.href = legalPaths.cookies + '#configuracion';
+      }
+    });
+
+    return banner;
+  };
+
+  const openSettings = event => {
+    if (event) event.preventDefault();
+    const isCookiePolicyPage = window.location.pathname.endsWith('/politica-cookies.html') || window.location.pathname.endsWith('politica-cookies.html');
+    if (isCookiePolicyPage) {
+      const target = document.getElementById('configuracion');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      const status = document.getElementById('cookiePrefsStatus');
+      if (status) {
+        status.textContent = 'Ajusta tus preferencias y guarda los cambios.';
+      }
+      return;
+    }
+
+    try {
+      window.localStorage.removeItem(CONSENT_KEY);
+    } catch (_) {
+      // ignore storage errors
+    }
+    applyConsent('pending');
+    renderBanner();
+  };
+
+  document.querySelectorAll('[data-cookie-settings]').forEach(link => {
+    link.addEventListener('click', openSettings);
+  });
+
+  const initCookiePreferencesPanel = () => {
+    const panel = document.getElementById('cookiePreferencesPanel');
+    if (!panel) return;
+
+    const analyticsInput = document.getElementById('cookieAnalytics');
+    const marketingInput = document.getElementById('cookieMarketing');
+    const status = document.getElementById('cookiePrefsStatus');
+    const acceptAllBtn = document.getElementById('acceptAllCookies');
+    const rejectOptionalBtn = document.getElementById('rejectOptionalCookies');
+    const saveBtn = document.getElementById('saveCookiePreferences');
+
+    if (!analyticsInput || !marketingInput || !status || !acceptAllBtn || !rejectOptionalBtn || !saveBtn) {
+      return;
+    }
+
+    const refreshInputs = () => {
+      const prefs = readPrefs();
+      analyticsInput.checked = !!prefs.analytics;
+      marketingInput.checked = !!prefs.marketing;
+      status.textContent = 'Estado actual: ' + (prefs.analytics || prefs.marketing ? 'cookies opcionales permitidas.' : 'solo cookies necesarias activas.');
+    };
+
+    const persistFromInputs = () => {
+      const prefs = savePrefs({
+        analytics: analyticsInput.checked,
+        marketing: marketingInput.checked
+      });
+      const consent = consentFromPrefs(prefs);
+      safeSet(CONSENT_KEY, consent);
+      applyConsent(consent);
+      const banner = document.getElementById('cookieBanner');
+      if (banner) closeBanner(banner);
+      status.textContent = 'Preferencias guardadas correctamente.';
+    };
+
+    acceptAllBtn.addEventListener('click', () => {
+      analyticsInput.checked = true;
+      marketingInput.checked = true;
+      persistFromInputs();
+    });
+
+    rejectOptionalBtn.addEventListener('click', () => {
+      analyticsInput.checked = false;
+      marketingInput.checked = false;
+      persistFromInputs();
+    });
+
+    saveBtn.addEventListener('click', persistFromInputs);
+    refreshInputs();
+  };
+
+  initCookiePreferencesPanel();
+
+  const saved = safeGet(CONSENT_KEY);
+  if (saved === 'accepted' || saved === 'rejected' || saved === 'custom') {
+    applyConsent(saved);
+    return;
+  }
+
+  applyConsent('pending');
+  renderBanner();
+})();
