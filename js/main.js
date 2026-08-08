@@ -386,7 +386,9 @@ if (form) {
 
     const nombre = (form.querySelector('#nombre')?.value || '').trim();
     const telefono = (form.querySelector('#telefono')?.value || '').trim();
-    const servicio = form.querySelector('#servicio')?.selectedOptions?.[0]?.textContent || 'Consulta';
+    const servicioSelect = form.querySelector('#servicio');
+    const servicioValue = (servicioSelect?.value || '').trim().toLowerCase();
+    const servicio = servicioSelect?.selectedOptions?.[0]?.textContent || 'Consulta';
     const fecha = (form.querySelector('#fecha')?.value || '').trim();
     const mensaje = (form.querySelector('#mensaje')?.value || '').trim();
 
@@ -395,16 +397,30 @@ if (form) {
       return;
     }
 
+    const getContactByService = value => {
+      const melanny = { name: 'Melanny', phone: '34660698806' };
+      const sofia = { name: 'Sofia', phone: '34698959656' };
+      const sandra = { name: 'Sandra', phone: '34610365493' };
+
+      if (['manicura', 'permanente', 'gel', 'acrilico', 'pedicura'].includes(value)) return melanny;
+      if (['pestanas', 'cejas', 'pestanas-cejas'].includes(value)) return sofia;
+      if (['masajes', 'masaje', 'masaje-relajante', 'masaje-terapeutico'].includes(value)) return sandra;
+      return melanny;
+    };
+
+    const contact = getContactByService(servicioValue);
+
     const waText = [
       'Hola MileNails, quiero reservar una cita.',
       'Nombre: ' + nombre,
       'Telefono: ' + telefono,
       'Servicio: ' + servicio,
+      'Profesional: ' + contact.name,
       'Fecha preferida: ' + (fecha || 'Por definir'),
       'Detalle: ' + mensaje
     ].join('\n');
 
-    const waUrl = 'https://wa.me/34660698806?text=' + encodeURIComponent(waText);
+    const waUrl = 'https://wa.me/' + contact.phone + '?text=' + encodeURIComponent(waText);
     const btn = form.querySelector('[type="submit"]');
     const orig = btn.textContent;
     btn.textContent = 'Abriendo WhatsApp...';
