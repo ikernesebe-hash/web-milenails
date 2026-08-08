@@ -3,6 +3,30 @@
    ================================================================ */
 'use strict';
 
+const WA_CONTACTS = {
+  melanny: { name: 'Melanny', phone: '34660698806', formatted: '+34 660 698 806' },
+  sofia: { name: 'Sofia', phone: '34698959656', formatted: '+34 698 95 96 56' },
+  sandra: { name: 'Sandra', phone: '34610365493', formatted: '+34 610 36 54 93' }
+};
+
+function getContactByService(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+
+  if (['manicura', 'permanente', 'gel', 'acrilico', 'pedicura', 'unas', 'unas-pedicura'].includes(normalized)) {
+    return WA_CONTACTS.melanny;
+  }
+
+  if (['pestanas', 'cejas', 'pestanas-cejas'].includes(normalized)) {
+    return WA_CONTACTS.sofia;
+  }
+
+  if (['masajes', 'masaje', 'masaje-relajante', 'masaje-terapeutico'].includes(normalized)) {
+    return WA_CONTACTS.sandra;
+  }
+
+  return WA_CONTACTS.melanny;
+}
+
 /* ---- Image loading optimization ---- */
 (function optimizeImageLoading() {
   const heroImg = document.querySelector('.hero-img-wrapper img');
@@ -381,12 +405,27 @@ if (filterBtns.length && galleryFull) {
 /* ---- Contact form ---- */
 const form = document.getElementById('contactForm');
 if (form) {
+  const servicioSelect = form.querySelector('#servicio');
+  const serviceAdvisor = form.querySelector('#serviceAdvisor');
+
+  const updateServiceAdvisor = () => {
+    if (!serviceAdvisor) return;
+    const selectedValue = (servicioSelect?.value || '').trim().toLowerCase();
+    const contact = getContactByService(selectedValue);
+    serviceAdvisor.textContent = 'Te atiende: ' + contact.name + ' (' + contact.formatted + ').';
+  };
+
+  if (servicioSelect) {
+    servicioSelect.addEventListener('change', updateServiceAdvisor);
+  }
+
+  updateServiceAdvisor();
+
   form.addEventListener('submit', e => {
     e.preventDefault();
 
     const nombre = (form.querySelector('#nombre')?.value || '').trim();
     const telefono = (form.querySelector('#telefono')?.value || '').trim();
-    const servicioSelect = form.querySelector('#servicio');
     const servicioValue = (servicioSelect?.value || '').trim().toLowerCase();
     const servicio = servicioSelect?.selectedOptions?.[0]?.textContent || 'Consulta';
     const fecha = (form.querySelector('#fecha')?.value || '').trim();
@@ -396,17 +435,6 @@ if (form) {
       form.reportValidity();
       return;
     }
-
-    const getContactByService = value => {
-      const melanny = { name: 'Melanny', phone: '34660698806' };
-      const sofia = { name: 'Sofia', phone: '34698959656' };
-      const sandra = { name: 'Sandra', phone: '34610365493' };
-
-      if (['manicura', 'permanente', 'gel', 'acrilico', 'pedicura'].includes(value)) return melanny;
-      if (['pestanas', 'cejas', 'pestanas-cejas'].includes(value)) return sofia;
-      if (['masajes', 'masaje', 'masaje-relajante', 'masaje-terapeutico'].includes(value)) return sandra;
-      return melanny;
-    };
 
     const contact = getContactByService(servicioValue);
 
@@ -434,6 +462,20 @@ if (form) {
     }, 700);
   });
 }
+
+/* ---- WhatsApp links routing by service ---- */
+(function initServiceWhatsAppLinks() {
+  const links = document.querySelectorAll('a.js-wa-route[data-wa-service]');
+  if (!links.length) return;
+
+  links.forEach(link => {
+    const service = (link.getAttribute('data-wa-service') || '').trim().toLowerCase();
+    const serviceLabel = (link.getAttribute('data-wa-label') || 'este servicio').trim();
+    const contact = getContactByService(service);
+    const text = 'Hola MileNails, quiero reservar ' + serviceLabel + ' con ' + contact.name + '.';
+    link.setAttribute('href', 'https://wa.me/' + contact.phone + '?text=' + encodeURIComponent(text));
+  });
+})();
 
 /* ---- Cookies consent ---- */
 (function initCookieConsent() {
