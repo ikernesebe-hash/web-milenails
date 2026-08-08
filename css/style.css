@@ -627,6 +627,13 @@ em{font-style:italic;color:var(--primary)}
   filter:brightness(1.03);
 }
 
+.about-story-block{
+  grid-template-columns:1fr 1.1fr;
+  align-items:center;
+}
+.about-story-media{min-height:260px}
+.about-story-title-mobile{display:none}
+
 /* ================================================================
    GALERIA PAGE
    ================================================================ */
@@ -806,6 +813,54 @@ em{font-style:italic;color:var(--primary)}
   .cookie-banner-open .whatsapp-float{bottom:8.8rem}
   .cta-buttons{flex-direction:column;align-items:center}
   .svc-block{grid-template-columns:1fr}
+  .about-story-block{
+    grid-template-columns:1fr !important;
+    gap:1.6rem;
+    padding:1.2rem;
+  }
+  .about-story-title-mobile{
+    display:block;
+    width:100%;
+    max-width:100%;
+    margin:0;
+    font-family:var(--font-head);
+    font-size:clamp(2rem, 9vw, 2.5rem);
+    line-height:1.1;
+    color:var(--dark);
+    box-sizing:border-box;
+  }
+  .about-story-title-desktop{display:none}
+  .about-story-media{
+    display:block;
+    width:100%;
+    max-width:100%;
+    min-height:0;
+    aspect-ratio:auto;
+    box-sizing:border-box;
+  }
+  .about-story-media img{
+    width:100%;
+    max-width:100%;
+    height:auto;
+    object-fit:unset;
+    box-sizing:border-box;
+  }
+  .about-story-block .svc-info,
+  .about-story-block .svc-info h2,
+  .about-story-block .svc-info p{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+  .about-story-block .svc-info h2{
+    line-height:1.2;
+    margin-bottom:1rem;
+  }
+  .about-story-block .svc-info p{
+    font-size:1rem;
+    line-height:1.62;
+  }
+  .about-story-block .svc-price{margin-top:.35rem}
   .team-profile{grid-template-columns:1fr;gap:1rem;align-items:start}
   .team-profile .svc-info{padding-left:0}
   .team-wrap{padding:1.3rem}
@@ -825,4 +880,5 @@ em{font-style:italic;color:var(--primary)}
   .gallery-btn{width:38px;height:38px;font-size:1.35rem}
   .gallery-full{grid-template-columns:1fr}
   .team-profile{grid-template-columns:1fr}
+  .about-story-block{padding:1rem}
 }
