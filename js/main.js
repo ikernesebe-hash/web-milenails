@@ -490,6 +490,81 @@ if (form) {
   });
 })();
 
+/* ---- WhatsApp picker for generic CTA buttons ---- */
+(function initWhatsAppPicker() {
+  const pickerLinks = document.querySelectorAll('a.js-wa-picker');
+  if (!pickerLinks.length) return;
+
+  const pickerTemplate = [
+    '<div id="waPickerOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;z-index:2500;padding:1rem;">',
+    '  <div role="dialog" aria-modal="true" aria-labelledby="waPickerTitle" style="width:min(420px,100%);background:#fff;border-radius:16px;padding:1rem 1rem 1.1rem;box-shadow:0 30px 80px rgba(0,0,0,.32);">',
+    '    <h3 id="waPickerTitle" style="margin:0 0 .35rem;font-size:1.1rem;line-height:1.25;color:#1f1f1f;">¿Qué servicio quieres reservar?</h3>',
+    '    <p style="margin:0 0 .85rem;color:#646464;font-size:.92rem;">Te llevamos al WhatsApp de la profesional correcta.</p>',
+    '    <div style="display:grid;gap:.6rem;">',
+    '      <button type="button" data-wa-pick="unas-pedicura" style="width:100%;border:0;border-radius:12px;padding:.78rem .9rem;background:#ff1493;color:#fff;font-weight:600;cursor:pointer;">Uñas y pedicura · Melanny</button>',
+    '      <button type="button" data-wa-pick="pestanas-cejas" style="width:100%;border:0;border-radius:12px;padding:.78rem .9rem;background:#ff4eaa;color:#fff;font-weight:600;cursor:pointer;">Pestañas y cejas · Sofía</button>',
+    '      <button type="button" data-wa-pick="masajes" style="width:100%;border:0;border-radius:12px;padding:.78rem .9rem;background:#ff79bf;color:#fff;font-weight:600;cursor:pointer;">Masajes y terapias · Sandra</button>',
+    '    </div>',
+    '    <button type="button" data-wa-close="true" style="margin-top:.85rem;width:100%;border:1px solid #e2e2e2;border-radius:10px;padding:.62rem .8rem;background:#fff;color:#444;cursor:pointer;">Cancelar</button>',
+    '  </div>',
+    '</div>'
+  ].join('');
+
+  document.body.insertAdjacentHTML('beforeend', pickerTemplate);
+  const overlay = document.getElementById('waPickerOverlay');
+  if (!overlay) return;
+
+  const closePicker = () => {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  };
+
+  const openPicker = () => {
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  };
+
+  const openWhatsAppFor = service => {
+    const contact = getContactByService(service);
+    const labelMap = {
+      'unas-pedicura': 'uñas y pedicura',
+      'pestanas-cejas': 'pestañas y cejas',
+      'masajes': 'masajes y terapias'
+    };
+    const serviceLabel = labelMap[service] || 'este servicio';
+    const text = 'Hola MileNails, quiero reservar ' + serviceLabel + ' con ' + contact.name + '.';
+    const url = 'https://wa.me/' + contact.phone + '?text=' + encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  pickerLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      openPicker();
+    });
+  });
+
+  overlay.addEventListener('click', e => {
+    const pickBtn = e.target.closest('[data-wa-pick]');
+    if (pickBtn) {
+      const service = pickBtn.getAttribute('data-wa-pick') || '';
+      closePicker();
+      openWhatsAppFor(service);
+      return;
+    }
+
+    if (e.target === overlay || e.target.closest('[data-wa-close]')) {
+      closePicker();
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.style.display === 'flex') {
+      closePicker();
+    }
+  });
+})();
+
 /* ---- Cookies consent ---- */
 (function initCookieConsent() {
   const CONSENT_KEY = 'milenails_cookie_consent_v1';
