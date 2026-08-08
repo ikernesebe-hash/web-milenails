@@ -5,7 +5,7 @@
 
 const WA_CONTACTS = {
   melanny: { name: 'Melanny', phone: '34660698806', formatted: '+34 660 698 806' },
-  sofia: { name: 'Sofia', phone: '34698959656', formatted: '+34 698 95 96 56' },
+  sofia: { name: 'Sofía', phone: '34698959656', formatted: '+34 698 95 96 56' },
   sandra: { name: 'Sandra', phone: '34610365493', formatted: '+34 610 36 54 93' }
 };
 
@@ -441,7 +441,7 @@ if (form) {
     const waText = [
       'Hola MileNails, quiero reservar una cita.',
       'Nombre: ' + nombre,
-      'Telefono: ' + telefono,
+      'Teléfono: ' + telefono,
       'Servicio: ' + servicio,
       'Profesional: ' + contact.name,
       'Fecha preferida: ' + (fecha || 'Por definir'),
