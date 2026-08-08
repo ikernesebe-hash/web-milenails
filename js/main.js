@@ -70,28 +70,69 @@ const hamburger = document.getElementById('hamburger');
 const navLinks  = document.getElementById('navLinks');
 
 if (hamburger && navLinks) {
+  let menuScrollY = 0;
+
+  const lockBodyScroll = () => {
+    menuScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.classList.add('menu-open');
+    document.body.style.top = '-' + menuScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  };
+
+  const unlockBodyScroll = () => {
+    const topValue = document.body.style.top;
+    document.body.classList.remove('menu-open');
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+
+    if (topValue) {
+      const stored = Math.abs(parseInt(topValue, 10)) || menuScrollY || 0;
+      window.scrollTo(0, stored);
+    }
+  };
+
+  const openMenu = () => {
+    hamburger.classList.add('open');
+    navLinks.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    lockBodyScroll();
+  };
+
+  const closeMenu = () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    unlockBodyScroll();
+  };
+
   hamburger.addEventListener('click', () => {
-    const isOpen = hamburger.classList.toggle('open');
-    navLinks.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    document.body.classList.toggle('menu-open', isOpen);
+    const isOpen = hamburger.classList.contains('open');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   });
 
   navLinks.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.classList.remove('menu-open');
+      closeMenu();
     });
   });
 
   document.addEventListener('click', e => {
     if (navbar && !navbar.contains(e.target) && navLinks.classList.contains('open')) {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.classList.remove('menu-open');
+      closeMenu();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && navLinks.classList.contains('open')) {
+      closeMenu();
     }
   });
 }

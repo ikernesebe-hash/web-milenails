@@ -744,17 +744,22 @@ em{font-style:italic;color:var(--primary)}
   }
   body.menu-open{
     overflow:hidden;
+    position:fixed;
+    width:100%;
     touch-action:none;
+    overscroll-behavior:none;
   }
   .nav-container{justify-content:space-between;gap:.75rem}
   .nav-links{
-    display:flex;
+    display:none;
     position:fixed;
     top:calc(var(--nav-h) + env(safe-area-inset-top, 0px));
     right:0;
     bottom:0;
     left:0;
     width:100%;
+    height:calc(100dvh - (var(--nav-h) + env(safe-area-inset-top, 0px)));
+    min-height:calc(100vh - (var(--nav-h) + env(safe-area-inset-top, 0px)));
     background:#fff;
     flex-direction:column;
     justify-content:center;
@@ -773,6 +778,7 @@ em{font-style:italic;color:var(--primary)}
     overflow-y:auto;
   }
   .nav-links.open{
+    display:flex;
     transform:translateY(0);
     opacity:1;
     visibility:visible;
