@@ -27,6 +27,18 @@ function getContactByService(value) {
   return WA_CONTACTS.melanny;
 }
 
+function getContactByServiceAndLabel(value, label) {
+  const fromValue = getContactByService(value);
+  if (value && String(value).trim()) return fromValue;
+
+  const normalizedLabel = String(label || '').trim().toLowerCase();
+  if (normalizedLabel.includes('pesta') || normalizedLabel.includes('ceja')) return WA_CONTACTS.sofia;
+  if (normalizedLabel.includes('masaj')) return WA_CONTACTS.sandra;
+  if (normalizedLabel.includes('uñ') || normalizedLabel.includes('un') || normalizedLabel.includes('pedi')) return WA_CONTACTS.melanny;
+
+  return WA_CONTACTS.melanny;
+}
+
 /* ---- Image loading optimization ---- */
 (function optimizeImageLoading() {
   const heroImg = document.querySelector('.hero-img-wrapper img');
@@ -411,7 +423,8 @@ if (form) {
   const updateServiceAdvisor = () => {
     if (!serviceAdvisor) return;
     const selectedValue = (servicioSelect?.value || '').trim().toLowerCase();
-    const contact = getContactByService(selectedValue);
+    const selectedLabel = servicioSelect?.selectedOptions?.[0]?.textContent || '';
+    const contact = getContactByServiceAndLabel(selectedValue, selectedLabel);
     serviceAdvisor.textContent = 'Te atiende: ' + contact.name + ' (' + contact.formatted + ').';
   };
 
@@ -436,7 +449,7 @@ if (form) {
       return;
     }
 
-    const contact = getContactByService(servicioValue);
+    const contact = getContactByServiceAndLabel(servicioValue, servicio);
 
     const waText = [
       'Hola MileNails, quiero reservar una cita.',
