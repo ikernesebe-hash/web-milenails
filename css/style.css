@@ -634,6 +634,14 @@ em{font-style:italic;color:var(--primary)}
 .about-story-media{min-height:260px}
 .about-story-title-mobile{display:none}
 
+@media (max-width:1024px) and (min-width:769px){
+  .about-story-block{
+    grid-template-columns:1fr 1.1fr;
+    gap:2rem;
+    align-items:center;
+  }
+}
+
 /* ================================================================
    GALERIA PAGE
    ================================================================ */
@@ -717,6 +725,8 @@ em{font-style:italic;color:var(--primary)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .footer-brand{grid-column:span 2}
   .svc-block{grid-template-columns:220px 1fr}
+  .about-story-block{grid-template-columns:1fr 1.1fr}
+  .about-story-media{min-height:260px}
   .team-profile{grid-template-columns:280px minmax(0,1fr);column-gap:1.6rem}
   .team-profile .svc-info{padding-left:.6rem}
   .svc-split{grid-template-columns:1fr}
@@ -816,7 +826,10 @@ em{font-style:italic;color:var(--primary)}
   .about-story-block{
     grid-template-columns:1fr !important;
     gap:1.6rem;
-    padding:1.2rem;
+    padding:0;
+    border:none;
+    box-shadow:none;
+    background:transparent;
   }
   .about-story-title-mobile{
     display:block;
@@ -852,6 +865,7 @@ em{font-style:italic;color:var(--primary)}
     max-width:100%;
     box-sizing:border-box;
   }
+  .about-story-block .svc-info{padding:0}
   .about-story-block .svc-info h2{
     line-height:1.2;
     margin-bottom:1rem;
@@ -880,5 +894,5 @@ em{font-style:italic;color:var(--primary)}
   .gallery-btn{width:38px;height:38px;font-size:1.35rem}
   .gallery-full{grid-template-columns:1fr}
   .team-profile{grid-template-columns:1fr}
-  .about-story-block{padding:1rem}
+  .about-story-block{padding:0}
 }
